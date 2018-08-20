@@ -1,0 +1,175 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8' />
+    <title></title>
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.44.1/mapbox-gl.js'></script>
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.44.1/mapbox-gl.css' rel='stylesheet' />
+    <style>
+        body { margin:0; padding:0; }
+        #map { position:absolute; top:0; bottom:0; width:100%; }
+    </style>
+</head>
+<body>
+
+<style>
+#map {
+    position: fixed;
+    width:50%;
+}
+#features {
+    width: 50%;
+    margin-left: 50%;
+    font-family: Tw Cen MT;
+    overflow-y: scroll;
+    background-color: #fafafa;
+}
+section {
+    padding:  25px 50px;
+    line-height: 25px;
+    border-bottom: 1px solid #ddd;
+    opacity: 0.25;
+    font-size: 20px;
+}
+section.active {
+    opacity: 1;
+}
+section:last-child {
+    border-bottom: none;
+    margin-bottom: 1000px;
+}
+</style>
+
+<div id='map'></div>
+<div id='features'>
+    <section id='welcome' class='active'>
+        <h3>Selam herkeslere!</h3>
+        <p>Şimdi sizlere İstanbul'da bir günümün nasıl geçtiğini göstereceğim. Öncelikle yanda gördüğünüz şehir İstanbul oluyor :D</p>
+    </section>
+    <section id='section1' class='active'>
+        <h3>Bölüm1: Evim Evim Güzel Evim</h3>
+        <p>Evim Kadıköy'de Rexx Sinemasının hemen karşısında yer alıyor. Yakınlarımda birçok cafe, lokanta, market bulunmakta.</p>
+    </section>
+    <section id='section2'>
+        <h3>Bölüm2: Rıhtım</h3>
+        <p>Okula veya Avrupa kıtasında herhangi bir yere gitmek istediğimde evden çıkıp rıhtıma gidiyorum. Bu yaklaşık 7-8 dakika sürüyor.</p>
+    </section>
+    <section id='section3'>
+        <h3>Bölüm3: Beşiktaş İskele</h3>
+        <p>You can add pictures! <br><br> <img src="https://i.imgur.com/NF8af.jpg"><br><br></p>
+    </section>
+    <section id='section4'>
+        <h3>Bölüm4: Beşiktaş Shuttle</h3>
+        <p>Or even gifs! <br><br><iframe src="https://giphy.com/embed/fpXxIjftmkk9y" width="224" height="240" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p></p>
+        </p>
+    </section>
+    <section id='section5'>
+        <h3>Bölüm5: santralistanbul</h3>
+        <p>Or videos! WHAT!<br><br><iframe width="560" height="315" src="https://www.youtube.com/embed/le0BLAEO93g" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe> </p>
+    </section>
+    <section id='section6'>
+        <h3>Bölüm6: Eve Dönüş</h3>
+        <p>The most important thing is to tell <i>your</i> story. What makes you you?</p>
+    </section>
+    <section id='section7'>
+        <h3>Time to make your own</h3>
+        <p>Have fun!<br><br><iframe src="https://giphy.com/embed/lJNoBCvQYp7nq" width="300" height="300" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p></p></p>
+    </section>
+</div>
+<script>
+mapboxgl.accessToken = 'pk.eyJ1IjoiYnVyYWt3cml0ZXMiLCJhIjoiY2psMjUycTNrMWhydzNrbndsOHI4ZjhxeCJ9.AJ6_u6FZ76q-ZilHIMV1VQ';
+var map = new mapboxgl.Map({
+    container: 'map',
+    style: 'mapbox://styles/mapbox/outdoors-v10',
+        bearing: -0,
+        center: [-108.866174, 49.272291],
+        zoom: 2,
+        speed: 0.8,
+        pitch: 0
+});
+var chapters = {
+    'welcome': {
+        bearing: -0,
+        center: [29.175778, 40.995666],
+        zoom: 9.06,
+        speed: 0.8,
+        pitch: 0
+    },
+    'section1': {
+        bearing: 0,
+        center: [29.026780, 40.987621],
+        zoom: 18.06,
+        pitch: 0
+    },
+    'section2': {
+        center: [29.022560, 40.991034],
+        bearing: 0,
+        zoom: 16.65,
+        speed: 0.6,
+        pitch: 44.50
+    },
+    'section3': {
+        bearing: 0,
+        center: [29.006882, 41.040986],
+        zoom: 16.12,
+        speed: 0.6,
+        pitch: 44.00
+    },
+    'section4': {
+        bearing: 0,
+        center: [29.003956, 41.041792],
+        zoom: 18.33,
+        speed: 0.6,
+        pitch: 0
+    },
+    'section5': {
+        bearing: 0,
+        center: [28.947079, 41.066072],
+        zoom: 16.23,
+        pitch: 44.50,
+        speed: 0.6
+    },
+    'section6': {
+        bearing: 0,
+        center: [29.026884, 40.987870],
+        zoom: 17.96,
+        pitch: 44,
+        speed: 0.6
+    },
+    'section7': {
+        bearing: -0,
+        center: [29.093198, 41.008882],
+        zoom: 10.19,
+        speed: 0.8,
+        pitch: 44
+    },
+};
+// On every scroll event, check which element is on screen
+window.onscroll = function() {
+    var chapterNames = Object.keys(chapters);
+    for (var i = 0; i < chapterNames.length; i++) {
+        var chapterName = chapterNames[i];
+        if (isElementOnScreen(chapterName)) {
+            setActiveChapter(chapterName);
+            break;
+        }
+    }
+};
+var activeChapterName = 'baker';
+function setActiveChapter(chapterName) {
+    if (chapterName === activeChapterName) return;
+    map.flyTo(chapters[chapterName]);
+    document.getElementById(chapterName).setAttribute('class', 'active');
+    document.getElementById(activeChapterName).setAttribute('class', '');
+    activeChapterName = chapterName;
+}
+function isElementOnScreen(id) {
+    var element = document.getElementById(id);
+    var bounds = element.getBoundingClientRect();
+    return bounds.top < window.innerHeight && bounds.bottom > 0;
+}
+</script>
+</body>
+</html>
